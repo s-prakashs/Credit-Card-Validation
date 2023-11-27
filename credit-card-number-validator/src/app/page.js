@@ -1,3 +1,5 @@
+"use client"; // This is a client component 👈🏽
+
 import React, { useState } from 'react';
 
 function CreditCardInput() {
@@ -48,8 +50,8 @@ function CreditCardInput() {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen">
-      <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
+    <div className="flex items-center justify-center h-screen min-w-64">
+      <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 min-w-80 min-h-40" onSubmit={handleSubmit}>
         <label htmlFor="creditCardNumber" className="block text-gray-700 font-bold mb-2">
           Credit Card Number
         </label>
@@ -62,8 +64,11 @@ function CreditCardInput() {
           onChange={(e) => setCreditCardNumber(e.target.value)}
         />
         {/* Validation error message */}
-        {validationError && (
+        {validationError && !validationError.startsWith('Success') && (
           <p className="text-red-500 text-xs italic">{validationError}</p>
+        )}
+        {validationError && validationError.startsWith('Success') && (
+          <p className="text-green-500 text-x">{validationError}</p>
         )}
         <button
           type="submit"
