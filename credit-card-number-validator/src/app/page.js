@@ -5,7 +5,11 @@ const MIN_LENGTH = 12; // Set a minimum length requirement
 
 function CreditCardInput() {
   const [creditCardNumber, setCreditCardNumber] = useState('');
+  const [cardholderName, setCardholderName] = useState('');
+  const [cardExpiry, setCardExpiry] = useState('');
+  const [cvv, setCvv] = useState('');
   const [validationError, setValidationError] = useState('');
+
   
   const isNumber = (value) => {
     // We can use parseFloat or Number to convert the value to a number
@@ -24,6 +28,7 @@ function CreditCardInput() {
     //console.log("isValidCreditCard:" + isValidCreditCard + ", creditCardNumber:" + creditCardNumber + ", creditCardNumber.len: " + creditCardNumber.length);
     if (isValidCreditCard) {
       try {
+        console.table(creditCardNumber, cardholderName, cardExpiry, cvv, validationError);
         const response = await fetch(`http://localhost:3010/card/validate?d=${encodeURIComponent(creditCardNumber)}`);
         if (response.ok) {
           const data = await response.json();
@@ -87,6 +92,17 @@ function CreditCardInput() {
   return (
     <div className="flex items-center justify-center h-screen min-w-64">
       <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 min-w-80 min-h-40" onSubmit={handleSubmit}>
+        <label htmlFor="cardholderName" className="block text-gray-700 font-bold mb-2">
+          Cardholder's Name
+        </label>
+        <input
+          id="cardholderName"
+          type="text"
+          placeholder="Enter cardholder's name"
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-4"
+          value={cardholderName}
+          onChange={(e) => setCardholderName(e.target.value)}
+        />
         <label htmlFor="creditCardNumber" className="block text-gray-700 font-bold mb-2">
           Credit Card Number
         </label>
@@ -94,9 +110,32 @@ function CreditCardInput() {
           id="creditCardNumber"
           type="text"
           placeholder="Enter your credit card number"
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-4"
           value={creditCardNumber}
           onChange={(e) => setCreditCardNumber(e.target.value)}
+        />
+        <label htmlFor="cardExpiry" className="block text-gray-700 font-bold mb-2">
+          Card Expiry (MMYY)
+        </label>
+        <input
+          id="cardExpiry"
+          type="text"
+          placeholder="MMYY"
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-4"
+          value={cardExpiry}
+          onChange={(e) => setCardExpiry(e.target.value)}
+        />
+
+        <label htmlFor="cvv" className="block text-gray-700 font-bold mb-2">
+          CVV
+        </label>
+        <input
+          id="cvv"
+          type="text"
+          placeholder="Enter CVV"
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-4"
+          value={cvv}
+          onChange={(e) => setCvv(e.target.value)}
         />
         {/* Validation error message */}
         {validationError && !validationError.endsWith('true') && (
